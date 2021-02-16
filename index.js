@@ -1,13 +1,29 @@
+
 const express = require('express');
+const bodyParser = require('body-parser');
 const https = require('https');
 const app = express();
 
 
+app.use(bodyParser.urlencoded({ extended: true }));
+
+
 //const members = httpcodeforces.com/api/contest.list?gym=true;
 app.get("/", function (req, res) {
+
+    res.sendFile(__dirname + "/front.html");
+
+
+    //res.send("Server is UP and running")
+
+})
+
+app.post("/", function (req, res) {
+    const handle = req.body.userHandle;
+    // var handle1 = document.getElementById("handle");
     const url = "https://codeforces.com/api/problemset.problems";
-    const urlrat = "https://codeforces.com/api/user.info?handles=professor-flux";
-    const usersum = "https://codeforces.com/api/user.status?handle=professor-flux";
+    const urlrat = "https://codeforces.com/api/user.info?handles=" + handle;
+    const usersum = "https://codeforces.com/api/user.status?handle=" + handle;
 
     var data;
     //console.log(response.statusCode)
@@ -79,10 +95,13 @@ app.get("/", function (req, res) {
                                 }
                                 //arr.push(temp[i]);
                             }
-                            console.log(temp.length);
+                            //console.log(temp.length);
                             console.log(arr);
                             console.log(arr.length);
-                            // console.log(rat);
+                            console.log(rat);
+                            console.log(user_arr.length);
+                            res.write("User rating" + rat);
+                            res.send();
                         })
 
                     })
@@ -93,14 +112,17 @@ app.get("/", function (req, res) {
     })
 
 
-
-
-
-
-
-    res.send("Server is UP and running")
-
 })
+
+
+
+
+
+
+
+
+
+
 app.listen(5000, function (req, res) {
     console.log("Server is runnung at port 5000")
 })
