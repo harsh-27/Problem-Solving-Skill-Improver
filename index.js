@@ -11,10 +11,10 @@ app.use(bodyParser.json());
 app.use(cors());
 
 //const members = httpcodeforces.com/api/contest.list?gym=true;
-app.post("/rating", function (req, res) {
-    console.log(req.body);
-    res.send("Hello");
-})
+// app.post("/rating", function (req, res) {
+//     console.log(req.body);
+//     res.send("Hello");
+// })
 
 var rat;
 var arr = [];
