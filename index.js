@@ -2,25 +2,25 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const https = require('https');
+const cors = require('cors');
 const app = express();
 
 
-app.use(bodyParser.urlencoded({ extended: true }));
 
+app.use(bodyParser.json());
+app.use(cors());
 
 //const members = httpcodeforces.com/api/contest.list?gym=true;
-app.get("/", function (req, res) {
-
-    res.sendFile(__dirname + "/front.html");
-
-
-    //res.send("Server is UP and running")
-
+app.post("/rating", function (req, res) {
+    console.log(req.body);
+    res.send("Hello");
 })
 
-app.post("/", function (req, res) {
-    const handle = req.body.userHandle;
-    // var handle1 = document.getElementById("handle");
+var rat;
+var arr = [];
+app.post("/nrating", function (req, res) {
+    const handle = req.body.handle;
+    console.log(req.body);
     const url = "https://codeforces.com/api/problemset.problems";
     const urlrat = "https://codeforces.com/api/user.info?handles=" + handle;
     const usersum = "https://codeforces.com/api/user.status?handle=" + handle;
@@ -28,7 +28,6 @@ app.post("/", function (req, res) {
     var data;
     //console.log(response.statusCode)
 
-    var rat;
     var user_arr = [];
     https.get(urlrat, function (res1) {
         res1.on("data", function (data) {
@@ -73,7 +72,7 @@ app.post("/", function (req, res) {
                         response.on("end", function () {
                             var ans = JSON.parse(data);
                             var temp = ans.result.problems;
-                            var arr = [];
+
                             var rem = rat % 100;
                             var vrat = rat;
                             if (rem == 0) {
@@ -100,7 +99,11 @@ app.post("/", function (req, res) {
                             console.log(arr.length);
                             console.log(rat);
                             console.log(user_arr.length);
-                            res.write("User rating" + rat);
+                            let obj = {
+                                rating: rat,
+                                ques: arr
+                            };
+                            res.json(obj);
                             res.send();
                         })
 
@@ -113,14 +116,14 @@ app.post("/", function (req, res) {
 
 
 })
+app.get("/nrating", function (req, res) {
 
+    res.write("User Rating " + rat);
+    res.send();
 
+    //res.send("Server is UP and running");
 
-
-
-
-
-
+})
 
 
 app.listen(5000, function (req, res) {
