@@ -32,7 +32,7 @@ app.post("/nrating", function (req, res) {
     https.get(urlrat, function (res1) {
         res1.on("data", function (data) {
             rat = (JSON.parse(data)).result[0].rating;
-            console.log(rat);
+            //console.log(rat);
             https.get(usersum, function (res2) {
                 data = "";
                 res2.on("data", function (chunk) {
@@ -84,6 +84,7 @@ app.post("/nrating", function (req, res) {
                             }
                             //console.log(vrat);
                             //console.log(temp);
+                            arr = [];
                             var cnt = 0;
                             for (var i = 0; i < temp.length && cnt < 10; i++) {
                                 var x = user_arr.indexOf(temp[i].name)
