@@ -100,11 +100,20 @@ app.post("/nrating", function (req, res) {
                             console.log(arr.length);
                             console.log(rat);
                             console.log(user_arr.length);
-                            let obj = {
-                                rating: rat,
-                                ques: arr
-                            };
-                            res.json(obj);
+                            if (arr.length != 0) {
+                                let obj = {
+                                    rating: rat,
+                                    ques: arr
+                                };
+                                res.json(obj);
+                            }
+                            else {
+                                let obj = {
+                                    rating: rat,
+                                    ques: []
+                                };
+                                res.json(obj);
+                            }
                             res.send();
                         })
 
