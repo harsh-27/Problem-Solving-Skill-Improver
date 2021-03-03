@@ -126,14 +126,14 @@ app.post("/nrating", function (req, res) {
 
 
 })
-app.get("/nrating", function (req, res) {
+// app.get("/nrating", function (req, res) {
 
-    res.write("User Rating " + rat);
-    res.send();
+//     res.write("User Rating " + rat);
+//     res.send();
 
-    //res.send("Server is UP and running");
+//     //res.send("Server is UP and running");
 
-})
+// })
 
 
 app.listen(5000, function (req, res) {
