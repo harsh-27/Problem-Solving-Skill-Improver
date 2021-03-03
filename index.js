@@ -54,7 +54,7 @@ app.post("/nrating", function (req, res) {
                         }
                     }
 
-                    // console.log(user_arr);
+                    //console.log(user_arr);
                     // console.log(rat);
                     // console.log(user_arr.length);
                     https.get(url, function (response) {
@@ -108,9 +108,22 @@ app.post("/nrating", function (req, res) {
                                 res.json(obj);
                             }
                             else {
+                                if (rat > 0) {
+                                    arr = [];
+                                    var cnt = 0;
+                                    for (var i = 0; i < temp.length && cnt < 10; i++) {
+                                        var x = user_arr.indexOf(temp[i].name)
+                                        if (x == -1) {
+                                            // console.log(temp[i]);
+                                            arr.push(temp[i]);
+                                            cnt++;
+                                        }
+                                        //arr.push(temp[i]);
+                                    }
+                                }
                                 let obj = {
                                     rating: rat,
-                                    ques: []
+                                    ques: arr
                                 };
                                 res.json(obj);
                             }
