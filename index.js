@@ -18,16 +18,19 @@ mongoose.connect("mongodb://localhost:27017/lsampleDB", { useNewUrlParser: true 
 const sampleSchema = new mongoose.Schema({
     userName: String,
     password: String,
-    handle: String
+    handle: String,
+    todoList: [String],
+    rejList: [String]
 });
 
 const Lsample = mongoose.model("Lsample", sampleSchema);
 
-const lsample = new Lsample({
-    userName: "harsh",
-    password: "abcdef",
-    handle: "harsh_27"
-});
+// const lsample = new Lsample({
+//     userName: "harsh",
+//     password: "abcdef",
+//     handle: "harsh_27",
+//     todoList: []
+// });
 
 
 // const rate = new Rate({
@@ -38,9 +41,9 @@ Lsample.find(function (err, lsamples) {
     if (err) console.log(err);
     else {
         lsamples.forEach(function (lsample) {
-            console.log(lsample.handle);
-            console.log(lsample.userName);
-            console.log(lsample.password);
+            // console.log(lsample.handle);
+            // console.log(lsample.userName);
+            // console.log(lsample.password);
         });
     }
 });
@@ -201,7 +204,9 @@ app.post("/nrating", function (req, res) {
                 const lsample = new Lsample({
                     userName: userName,
                     password: password,
-                    handle: handle
+                    handle: handle,
+                    todoList: [],
+                    rejList: []
                 });
                 lsample.save();
                 calculation(handle, res);
