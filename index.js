@@ -161,12 +161,20 @@ function calculation(handle, res) {
                                         }
                                         //arr.push(temp[i]);
                                     }
+                                    let obj = {
+                                        rating: rat,
+                                        ques: arr
+                                    };
+                                    res.json(obj);
                                 }
-                                let obj = {
-                                    rating: rat,
-                                    ques: arr
-                                };
-                                res.json(obj);
+                                else {
+                                    let obj = {
+                                        rating: 0,
+                                        ques: []
+                                    };
+                                    res.json(obj);
+                                }
+
                             }
                             res.send();
                         })
