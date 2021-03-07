@@ -196,20 +196,39 @@ app.post("/nrating", function (req, res) {
                 }
             });
             if (x) {
-
                 calculation(handle, res);
 
             }
             else {
-                const lsample = new Lsample({
-                    userName: userName,
-                    password: password,
-                    handle: handle,
-                    todoList: [],
-                    rejList: []
-                });
-                lsample.save();
-                calculation(handle, res);
+
+
+                const urlrat = "https://codeforces.com/api/user.info?handles=" + handle;
+                https.get(urlrat, function (res1) {
+                    res1.on("data", function (data) {
+                        var check = (JSON.parse(data)).status;
+                        console.log(check);
+                        if (check == "FAILED") {
+                            console.log("Invalid Handle");
+                            let obj = {
+                                rating: -1,
+                                ques: []
+                            };
+                            res.json(obj);
+                            res.send();
+                        } else {
+                            const lsample = new Lsample({
+                                userName: userName,
+                                password: password,
+                                handle: handle,
+                                todoList: [],
+                                rejList: []
+                            });
+                            lsample.save();
+                            calculation(handle, res);
+                        }
+                    })
+                })
+
             }
         }
     });
