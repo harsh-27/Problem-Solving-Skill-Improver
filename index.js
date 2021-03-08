@@ -37,16 +37,6 @@ const Lsample = mongoose.model("Lsample", sampleSchema);
 //     handle: "harsh_27"
 // });
 
-Lsample.find(function (err, lsamples) {
-    if (err) console.log(err);
-    else {
-        lsamples.forEach(function (lsample) {
-            // console.log(lsample.handle);
-            // console.log(lsample.userName);
-            // console.log(lsample.password);
-        });
-    }
-});
 
 //rate.save();
 
@@ -189,11 +179,7 @@ function calculation(handle, res) {
 
 app.post("/list", function (req, res) {
     console.log(req.body);
-    let obj = {
-        ques: req.body.todoQues
-    }
-    res.json(obj);
-    res.send();
+    res.send(req.body);
 })
 
 app.post("/nrating", function (req, res) {
