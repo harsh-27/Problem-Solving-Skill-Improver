@@ -178,14 +178,51 @@ function calculation(handle, res) {
 }
 
 app.post("/list", function (req, res) {
-    console.log(req.body);
+    var x = req.body.todoQues;
+    var y = req.body.handle;
+    console.log(x);
+    console.log(y);
+    Lsample.findOneAndUpdate(
+        { handle: y },
+        { $push: { todoList: x } },
+        function (error, success) {
+            if (error) console.log(error);
+            else console.log(success);
+        }
+    );
 
     res.send(req.body);
 })
+// var objFriends = { fname: "fname", lname: "lname", surname: "surname" };
+// Friend.findOneAndUpdate(
+//     { _id: req.body.id },
+//     { $push: { friends: objFriends } },
+//     function (error, success) {
+//         if (error) {
+//             console.log(error);
+//         } else {
+//             console.log(success);
+//         }
+//     });
+// )
 app.post("/uwlist", function (req, res) {
-    console.log(req.body);
+    var x = req.body.removeQues;
+    var y = req.body.handle;
+    console.log(x);
+    console.log(y);
+    Lsample.findOneAndUpdate(
+        { handle: y },
+        { $push: { rejList: x } },
+        function (error, success) {
+            if (error) console.log(error);
+            else console.log(success);
+        }
+    );
     res.send(req.body);
 })
+//var friend = { firstName: 'Harry', lastName: 'Potter' };
+// person.friends.push(friend);
+// person.save(done);
 app.post("/nrating", function (req, res) {
     const handle = req.body.handle;
     const userName = req.body.userName;
