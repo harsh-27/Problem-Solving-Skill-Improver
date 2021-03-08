@@ -187,6 +187,14 @@ function calculation(handle, res) {
     })
 }
 
+app.post("/list", function (req, res) {
+    console.log(req.body);
+    let obj = {
+        ques: req.body.todoQues
+    }
+    res.json(obj);
+    res.send();
+})
 
 app.post("/nrating", function (req, res) {
     const handle = req.body.handle;
