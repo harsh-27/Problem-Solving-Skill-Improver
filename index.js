@@ -179,9 +179,13 @@ function calculation(handle, res) {
 
 app.post("/list", function (req, res) {
     console.log(req.body);
+
     res.send(req.body);
 })
-
+app.post("/uwlist", function (req, res) {
+    console.log(req.body);
+    res.send(req.body);
+})
 app.post("/nrating", function (req, res) {
     const handle = req.body.handle;
     const userName = req.body.userName;
@@ -251,3 +255,4 @@ app.post("/nrating", function (req, res) {
 app.listen(5000, function (req, res) {
     console.log("Server is runnung at port 5000")
 })
+//db.lsamples.update({"handle":"abc123"},{ $push: { "rejList": "Hello" }});
