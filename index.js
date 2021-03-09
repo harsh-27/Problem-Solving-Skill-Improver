@@ -19,8 +19,14 @@ const sampleSchema = new mongoose.Schema({
     userName: String,
     password: String,
     handle: String,
-    todoList: [String],
-    rejList: [String]
+    todoList: [{
+        contestId: String,
+        name: String
+    }],
+    rejList: [{
+        contestId: String,
+        name: String
+    }]
 });
 
 const Lsample = mongoose.model("Lsample", sampleSchema);
@@ -176,23 +182,6 @@ function calculation(handle, res) {
         })
     })
 }
-
-app.post("/list", function (req, res) {
-    var x = req.body.todoQues;
-    var y = req.body.handle;
-    console.log(x);
-    console.log(y);
-    Lsample.findOneAndUpdate(
-        { handle: y },
-        { $push: { todoList: x } },
-        function (error, success) {
-            if (error) console.log("already exist");
-            else console.log(success);
-        }
-    );
-
-    res.send(req.body);
-})
 // var objFriends = { fname: "fname", lname: "lname", surname: "surname" };
 // Friend.findOneAndUpdate(
 //     { _id: req.body.id },
@@ -205,24 +194,73 @@ app.post("/list", function (req, res) {
 //         }
 //     });
 // )
-app.post("/uwlist", function (req, res) {
-    var x = req.body.removeQues;
-    var y = req.body.handle;
-    console.log(x);
-    console.log(y);
+app.post("/list", function (req, res) {
+    var name_ques = req.body.name;
+    var handle_user = req.body.handle;
+    var contestId_check = req.body.contestId;
+    var add = { contestId: contestId_check, name: name_ques };
     Lsample.findOneAndUpdate(
-        { handle: y },
-        { $push: { rejList: x } },
+        { handle: handle_user },
+        { $push: { todoList: add } },
         function (error, success) {
-            if (error) console.log("already exist");
-            else console.log(success);
+            if (error) {
+                let p = 1;
+            }
+            else {
+                let p = 1;
+            }
         }
     );
-    res.send(req.body);
+    // //console.log("Hello......");
+    Lsample.find(function (err, lsamples) {
+        if (err) {
+            let p = 1;
+            res.send();
+        }
+        else {
+            var todoarr = [{
+                contestId: String,
+                name: String
+            }];
+            lsamples.forEach(function (lsample) {
+                if (handle_user == lsample.handle) {
+                    todoarr = lsample.todoList;
+                }
+            });
+            // let obj = {
+            //     doques_name: todoarr.name,
+            //     doques_id: todoarr.contestId
+            // }
+            //console.log(todoarr);
+            let obj = {
+                doques: todoarr
+            };
+            console.log(obj);
+            res.json(obj);
+            res.send();
+            //console.log("hello......");
+        }
+    });
 })
-//var friend = { firstName: 'Harry', lastName: 'Potter' };
-// person.friends.push(friend);
-// person.save(done);
+app.post("/uwlist", function (req, res) {
+    var name_ques = req.body.name;
+    var handle_user = req.body.handle;
+    var contestId_check = req.body.contestId;
+    var add = { contestId: contestId_check, name: name_ques };
+    Lsample.findOneAndUpdate(
+        { handle: handle_user },
+        { $push: { rejList: add } },
+        function (error, success) {
+            if (error) {
+                let p = 1;
+            }
+            else {
+                let p = 1;
+            }
+        }
+    );
+    res.send();
+})
 app.post("/nrating", function (req, res) {
     const handle = req.body.handle;
     const userName = req.body.userName;
@@ -259,6 +297,8 @@ app.post("/nrating", function (req, res) {
                             res.json(obj);
                             res.send();
                         } else {
+                            // contestId: String,
+                            //     name: String
                             const lsample = new Lsample({
                                 userName: userName,
                                 password: password,
