@@ -186,7 +186,7 @@ app.post("/list", function (req, res) {
         { handle: y },
         { $push: { todoList: x } },
         function (error, success) {
-            if (error) console.log(error);
+            if (error) console.log("already exist");
             else console.log(success);
         }
     );
@@ -214,7 +214,7 @@ app.post("/uwlist", function (req, res) {
         { handle: y },
         { $push: { rejList: x } },
         function (error, success) {
-            if (error) console.log(error);
+            if (error) console.log("already exist");
             else console.log(success);
         }
     );
