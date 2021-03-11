@@ -199,48 +199,69 @@ app.post("/list", function (req, res) {
     var handle_user = req.body.handle;
     var contestId_check = req.body.contestId;
     var add = { contestId: contestId_check, name: name_ques };
-    Lsample.findOneAndUpdate(
-        { handle: handle_user },
-        { $push: { todoList: add } },
-        function (error, success) {
+    console.log(add);
+
+    Lsample.findOne({ handle: handle_user },
+        async (error, item) => {
             if (error) {
                 let p = 1;
             }
             else {
-                let p = 1;
+                if (add.name !== '') {
+                    item.todoList.push(add);
+                    await item.save();
+                }
+                Lsample.find(function (err, lsamples) {
+                    if (err) {
+                        let p = 1;
+                        res.send();
+                    }
+                    else {
+                        var todoarr = [{
+                            contestId: '',
+                            name: ''
+                        }];
+                        lsamples.forEach(function (lsample) {
+                            if (handle_user == lsample.handle) {
+                                todoarr = lsample.todoList;
+                                // console.log(todoarr);
+                            }
+
+                        });
+                        // let obj = {
+                        //     doques_name: todoarr.name,
+                        //     doques_id: todoarr.contestId
+                        // }
+
+                        let obj = {
+                            doques: todoarr
+                        };
+                        //console.log(obj.doques);
+                        res.json(obj.doques);
+                        res.send();
+                        // console.log("hello......");
+                    }
+                });
+
             }
         }
-    );
+    )
+
+    // Lsample.findOneAndUpdate(
+    //     { handle: handle_user },
+    //     { $push: { todoList: add } },
+    //     function (error, success) {
+    //         if (error) {
+    //             let p = 1;
+    //         }
+    //         else {
+    //             let p = 1;
+    //         }
+    //     }
+    // ).then(() => {
+
+    // })
     // //console.log("Hello......");
-    Lsample.find(function (err, lsamples) {
-        if (err) {
-            let p = 1;
-            res.send();
-        }
-        else {
-            var todoarr = [{
-                contestId: String,
-                name: String
-            }];
-            lsamples.forEach(function (lsample) {
-                if (handle_user == lsample.handle) {
-                    todoarr = lsample.todoList;
-                }
-            });
-            // let obj = {
-            //     doques_name: todoarr.name,
-            //     doques_id: todoarr.contestId
-            // }
-            //console.log(todoarr);
-            let obj = {
-                doques: todoarr
-            };
-            console.log(obj);
-            res.json(obj);
-            res.send();
-            //console.log("hello......");
-        }
-    });
 })
 app.post("/uwlist", function (req, res) {
     var name_ques = req.body.name;
