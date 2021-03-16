@@ -1,4 +1,3 @@
-
 const express = require('express');
 const bodyParser = require('body-parser');
 const https = require('https');
@@ -55,16 +54,27 @@ const Lsample = mongoose.model("Lsample", sampleSchema);
 
 
 
-function calculation(handle, res) {
+async function calculation(handle, res) {
+    // console.log("haufhaefffeeafea" + Lsample.find({ handle: handle }));
     var rat;
     var arr = [];
     const url = "https://codeforces.com/api/problemset.problems";
     const urlrat = "https://codeforces.com/api/user.info?handles=" + handle;
     const usersum = "https://codeforces.com/api/user.status?handle=" + handle;
-
-    var data;
     //console.log(response.statusCode)
+    const lsamples = await Lsample.find({ handle: handle })
 
+    console.log("tarun" + lsamples);
+    var todoarr = [];
+    var removearr = [];
+    for (var i = 0; i < lsamples[0].todoList.length; i++) {
+        todoarr.push(lsamples[0].todoList[i].name)
+    }
+    for (var i = 0; i < lsamples[0].rejList.length; i++) {
+        removearr.push(lsamples[0].rejList[i].name)
+    }
+    console.log(removearr);
+    var data;
     var user_arr = [];
     https.get(urlrat, function (res1) {
         res1.on("data", function (data) {
@@ -125,7 +135,9 @@ function calculation(handle, res) {
                             var cnt = 0;
                             for (var i = 0; i < temp.length && cnt < 10; i++) {
                                 var x = user_arr.indexOf(temp[i].name)
-                                if (temp[i].rating == vrat && x == -1) {
+                                var y = todoarr.indexOf(temp[i].name);
+                                var z = removearr.indexOf(temp[i].name);
+                                if (temp[i].rating == vrat && x == -1 && y == -1 && z == -1) {
                                     // console.log(temp[i]);
                                     arr.push(temp[i]);
                                     cnt++;
@@ -268,19 +280,65 @@ app.post("/uwlist", function (req, res) {
     var handle_user = req.body.handle;
     var contestId_check = req.body.contestId;
     var add = { contestId: contestId_check, name: name_ques };
-    Lsample.findOneAndUpdate(
-        { handle: handle_user },
-        { $push: { rejList: add } },
-        function (error, success) {
+    Lsample.findOneAndUpdate({ handle: handle_user }, { $push: { rejList: add } }, function (error, success) {
+        if (error) {
+            let p = 1;
+        }
+        else {
+            let p = 1;
+        }
+    }
+    );
+    Lsample.findOneAndUpdate({ handle: handle_user }, { $pull: { todoList: add } }, function (error, success) {
+        if (error) {
+            let p = 1;
+        }
+        else {
+            let p = 1;
+        }
+    }
+    );
+    Lsample.findOne({ handle: handle_user },
+        async (error, item) => {
             if (error) {
                 let p = 1;
             }
             else {
-                let p = 1;
+                Lsample.find(function (err, lsamples) {
+                    if (err) {
+                        let p = 1;
+                        res.send();
+                    }
+                    else {
+                        var todoarr = [{
+                            contestId: '',
+                            name: ''
+                        }];
+                        lsamples.forEach(function (lsample) {
+                            if (handle_user == lsample.handle) {
+                                todoarr = lsample.todoList;
+                                // console.log(todoarr);
+                            }
+
+                        });
+                        // let obj = {
+                        //     doques_name: todoarr.name,
+                        //     doques_id: todoarr.contestId
+                        // }
+
+                        let obj = {
+                            doques: todoarr
+                        };
+                        //console.log(obj.doques);
+                        res.json(obj.doques);
+                        res.send();
+                        // console.log("hello......");
+                    }
+                });
+
             }
         }
-    );
-    res.send();
+    )
 })
 app.post("/nrating", function (req, res) {
     const handle = req.body.handle;
