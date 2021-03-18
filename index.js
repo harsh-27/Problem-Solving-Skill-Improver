@@ -351,13 +351,26 @@ app.post("/nrating", function (req, res) {
         else {
             var x = 0;
             lsamples.forEach(function (lsample) {
-                if (handle == lsample.handle) {
-                    x = 1;
+                if (userName == lsample.userName) {
+                    if (password == lsample.password) {
+                        x = 1;
+                    }
+                    else {
+                        x = -1;
+                    }
                 }
             });
-            if (x) {
+            if (x > 0) {
                 calculation(handle, res);
 
+            }
+            else if (x == -1) {
+                let obj = {
+                    rating: -2,
+                    ques: []
+                };
+                res.json(obj);
+                res.send();
             }
             else {
 
